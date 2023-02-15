@@ -11,3 +11,5 @@ Points to be noted:
 4. Statefulset is present in **stateful-set/els.yml**
 
 ## Doubts
+1. I have'nt created service.
+2. I also not added container folder in stateful set.
