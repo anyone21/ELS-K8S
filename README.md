@@ -12,4 +12,4 @@ Points to be noted:
 
 ## Doubts
 1. I have'nt created service.
-2. I also not added container folder in stateful set.
+2. I also not added container in stateful set.
