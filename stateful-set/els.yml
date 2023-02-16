@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elastic-search
+  namespace: elastic-env
+spec:
+  # selector:
+  #   matchLabels:
+  #     service: elastic-search
+  replicas: 2
+  # serviceName: elastic-search
+  template:
+    # metadata:
+    #   labels:
+    #     service: elastic-search
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                    - linux
+                - key: node-role.kubernetes.io/worker
+                  operator: In
+                  values:
+                    - worker
+                - key: type
+                  operator: In
+                  values:
+                    - on-premise
+                - key: provider
+                  operator: In
+                  values:
+                    - host
+                - key: service
+                  operator: In
+                  values:
+                    - virtualbox
+                - key: region
+                  operator: In
+                  values:
+                    - local
+                - key: availability_zone
+                  operator: In
+                  values:
+                    - local-c
+      containers:
+      
+      volumes:
+        - name: supervisor-server
+          configMap:
+            name: els-config
+        - name: els-supervisor
+          configMap:
+            name: els-config
+        - name: els-kernel
+          configMap:
+            name: els-config
+        - name: els-security
+          configMap:
+            name: els-config
+        - name: els-jvm
+          configMap:
+            name: els-config
+        - name: els-data
+          persistentVolumeClaim:
+            name: els-data
+        - name: els-log
+          persistentVolumeClaim:
+            name: els-log
+  volumeClaimTemplates:
+    - metadata:
+        name: els-data
+      spec:
+        storageClassName: elastic-env-els-data
+        volumeMode: Filesystem
+        accessMode:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage:
+              2Gi
+    - metadata:
+        name: els-log
+      spec:
+        storageClassName: elastic-env-els-log
+        volumeMode: Filesystem
+        accessMode:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage:
+              1Gi

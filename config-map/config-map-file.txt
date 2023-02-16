@@ -1,0 +1,10 @@
+$ kubectl create configmap els-config
+--from-file=supervisor-server=supervisor/conf/main.conf --from-file=els-supervisor=supervisor/conf/elasticsearch.ini --from-file=els-kernel=elasticsearch/conf/kernel.conf
+--from-file=els-security=elasticsearch/conf/security-limits.conf
+--from-file=els-jvm=elasticsearch/conf/jvm.options
+-n elastic-env
+
+
+
+
+annoying21/els:v1  ---- docker image

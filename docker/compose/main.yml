@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  elasticsearch:
+    image: sloopstash/elasticsearch:v1
+    container_name: elk-elasticsearch
+    privileged: true
+    command: "/usr/bin/supervisord -c /etc/supervisord.conf"
+    hostname: elk-elasticsearch
+    ports:
+      - "9200:9200"
+    volumes:
+      - ../../supervisor/conf/main.conf:/etc/supervisord.conf
+      - ../../supervisor/conf/elasticsearch.ini:/etc/supervisord.d/elasticsearch.ini
+      - ../../elasticsearch/conf/security-limits.conf:/etc/security/limits.d/10-elasticsearch-defaults.conf
+      - ../../elasticsearch/conf/elasticsearch.yml:/usr/local/lib/elasticsearch/config/elasticsearch.yml
+      - ../../elasticsearch/conf/jvm.options:/usr/local/lib/elasticsearch/config/jvm.options
+      - ../../elasticsearch/data:/opt/elasticsearch/data
+      - ../../elasticsearch/log:/opt/elasticsearch/log
+      - ../../elasticsearch/system:/opt/elasticsearch/system
+    networks:
+      elk-net:
+        ipv4_address: 100.2.1.10
+  
+networks:
+  elk-net:
+    external:
+      name: elk-net
